@@ -60,6 +60,8 @@ const BarChart = ({ data }: any) => {
 };
 
 const CandleChart = () => {
+  HighchartsMore(Highcharts);
+  HighchartsStock(Highcharts);
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
