@@ -1,26 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">Stock Price Application</h1> 
+
+
+
+This is a Stock Price Application, where you can view real-time stock price updates and historical data. The application provides detailed charts, including candlestick and line graphs, to help you analyze market trends and make informed decisions. You can track multiple stocks simultaneously, customize your view, and access a range of indicators to assist with technical analysis.
 
 ## Getting Started
 
-First, run the development server:
+First, install the modules:
+```bash
+npm install 
+# or 
+npm i
+```
+
+then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+finally, Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
 
 ## Learn More
+
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 To learn more about Next.js, take a look at the following resources:
 
