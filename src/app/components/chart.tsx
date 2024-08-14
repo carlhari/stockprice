@@ -52,7 +52,11 @@ export const BarChart = ({ data }: any) => {
     },
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
 };
 
 export const CandleChart = () => {
@@ -109,11 +113,13 @@ export const CandleChart = () => {
   };
 
   return (
-    <HighchartsReact
-      highcharts={Highcharts}
-      constructorType={"stockChart"}
-      options={options}
-    />
+    <>
+      <HighchartsReact
+        highcharts={Highcharts}
+        constructorType={"stockChart"}
+        options={options}
+      />
+    </>
   );
 };
 
@@ -159,7 +165,11 @@ export const LineChart = ({ data }: any) => {
     },
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
 };
 
 export const PieChart = ({ data }: any) => {
@@ -204,5 +214,9 @@ export const PieChart = ({ data }: any) => {
     },
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
 };

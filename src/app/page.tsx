@@ -1,16 +1,246 @@
 "use client";
-import { getStockPrice } from "@/app/utils/finapi";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+
+import { FormEvent, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { BarChart, CandleChart, LineChart, PieChart } from "./components/chart";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import HighchartsMore from "highcharts/highcharts-more";
+import HighchartsStock from "highcharts/modules/stock";
 import moment from "moment";
 import { FaSearch } from "react-icons/fa";
+import axios from "axios";
+
+const BarChart = ({ data }: any) => {
+  if (!data) return null;
+
+  // Convert data for the bar chart
+  const chartData = [
+    { name: "Open", y: data.o },
+    { name: "High", y: data.h },
+    { name: "Low", y: data.l },
+    { name: "Close", y: data.c },
+    { name: "Previous Close", y: data.pc },
+  ];
+
+  const options = {
+    chart: {
+      type: "bar",
+      borderRadius: "0.75rem",
+    },
+    title: {
+      text: "AAPL Stock Price Overview",
+    },
+    xAxis: {
+      categories: ["Open", "High", "Low", "Close", "Previous Close"],
+      title: {
+        text: null,
+      },
+    },
+    yAxis: {
+      title: {
+        text: "Value",
+      },
+    },
+    series: [
+      {
+        name: "Values",
+        data: chartData,
+      },
+    ],
+    credits: {
+      enabled: false,
+    },
+  };
+
+  return (
+    <>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
+};
+
+const CandleChart = () => {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(
+          "https://demo-live-data.highcharts.com/aapl-ohlc.json"
+        );
+
+        const data = response.data;
+        setData(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getData();
+  }, []);
+
+  if (!data) return <div>Loading...</div>;
+
+  const options = {
+    rangeSelector: {
+      selected: 1,
+    },
+
+    title: {
+      text: "AAPL Stock Price",
+    },
+
+    chart: {
+      borderRadius: "0.75rem",
+    },
+
+    series: [
+      {
+        type: "candlestick",
+        name: "AAPL Stock Price",
+        data: data,
+        dataGrouping: {
+          units: [
+            [
+              "week", // unit name
+              [1],
+            ],
+            ["month", [1, 2, 3, 4, 6]],
+          ],
+        },
+      },
+    ],
+  };
+
+  return (
+    <>
+      <HighchartsReact
+        highcharts={Highcharts}
+        constructorType={"stockChart"}
+        options={options}
+      />
+    </>
+  );
+};
+
+const LineChart = ({ data }: any) => {
+  if (!data) return null;
+
+  // Convert data for the bar chart
+  const chartData = [
+    { name: "Open", y: data.o },
+    { name: "High", y: data.h },
+    { name: "Low", y: data.l },
+    { name: "Close", y: data.c },
+    { name: "Previous Close", y: data.pc },
+  ];
+
+  const options = {
+    chart: {
+      type: "line",
+      borderRadius: "0.75rem",
+    },
+    title: {
+      text: "AAPL Stock Price Overview",
+    },
+    xAxis: {
+      categories: ["Open", "High", "Low", "Close", "Previous Close"],
+      title: {
+        text: null,
+      },
+    },
+    yAxis: {
+      title: {
+        text: "Value",
+      },
+    },
+    series: [
+      {
+        name: "Values",
+        data: chartData,
+      },
+    ],
+    credits: {
+      enabled: false,
+    },
+  };
+
+  return (
+    <>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
+};
+
+const PieChart = ({ data }: any) => {
+  if (!data) return null;
+
+  // Convert data for the bar chart
+  const chartData = [
+    { name: "Open", y: data.o },
+    { name: "High", y: data.h },
+    { name: "Low", y: data.l },
+    { name: "Close", y: data.c },
+    { name: "Previous Close", y: data.pc },
+  ];
+
+  const options = {
+    chart: {
+      type: "pie",
+      borderRadius: "0.75rem",
+    },
+    title: {
+      text: "AAPL Stock Price Overview",
+    },
+    xAxis: {
+      categories: ["Open", "High", "Low", "Close", "Previous Close"],
+      title: {
+        text: null,
+      },
+    },
+    yAxis: {
+      title: {
+        text: "Value",
+      },
+    },
+    series: [
+      {
+        name: "Values",
+        data: chartData,
+      },
+    ],
+    credits: {
+      enabled: false,
+    },
+  };
+
+  return (
+    <>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
+};
 
 export default function Home() {
   const [symbol, setSymbol] = useState<string>("");
   const [stockData, setStockData] = useState<any>(null);
   const [isPolling, setIsPolling] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
+
+  const BASE_URL = "https://finnhub.io/api/v1";
+  const getStockPrice = async (symbol: any) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/quote`, {
+        params: {
+          symbol: symbol,
+          token: process.env.NEXT_PUBLIC_KEY,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Invalid stock symbol or API error");
+    }
+  };
 
   const fetchStockData = async (symbol: string) => {
     const loadingId = toast.loading("Loading...");
